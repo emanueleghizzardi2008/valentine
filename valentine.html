@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine?</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: #ffe6f0;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 25px;
+      color: #d1005b;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    button {
+      padding: 15px 35px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #yesBtn {
+      background: #ff2d75;
+      color: white;
+      transition: transform 0.2s ease;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.05);
+    }
+
+    #noBtn {
+      background: #444;
+      color: white;
+      position: absolute;
+      left: 100px;
+      top: 100px;
+      z-index: 5;
+    }
+
+    /* Scritta arrabbiata */
+    #angryText {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #b30000;
+      min-height: 35px;
+      animation: pop 0.2s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Cuore finale */
+    .love-screen {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: #ffe6f0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      animation: fadeIn 0.6s ease;
+      z-index: 10;
+    }
+
+    .heart {
+      font-size: 170px;
+      animation: pulse 1s infinite;
+    }
+
+    .love-text {
+      font-size: 3rem;
+      color: #ff2d75;
+      font-weight: bold;
+      margin-top: 10px;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="main">
+    <h1>you will be my valentine?</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">Sì</button>
+    </div>
+
+    <div id="angryText"></div>
+  </div>
+
+  <button id="noBtn">No</button>
+
+  <div class="love-screen" id="loveScreen">
+    <div class="heart">❤️</div>
+    <div class="love-text">I LOVE YOU</div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const main = document.getElementById("main");
+    const loveScreen = document.getElementById("loveScreen");
+    const angryText = document.getElementById("angryText");
+
+    const angryPhrases = [
+      "MA CHE STAI FACENDO?! 😡",
+      "NO?! SERIO?! 😤",
+      "SMETTILA DI PROVARE 😠",
+      "EH NOOOO, NON CI PROVARE 😾",
+      "TI HO VISTO 👀😡",
+      "NON TOCCARE QUEL BOTTONE 😤",
+      "BASTA! PREMI SÌ 😡❤️",
+      "NON ESISTE 😠",
+      "TI PARE?! 😡",
+      "NON CI CASCO 😤",
+      "AHAHA NO 😡",
+      "STAI TESTANDO LA MIA PAZIENZA 😠",
+      "MA CHE TI PASSA PER LA TESTA?! 😡",
+      "NON CI PROVARE NEMMENO 😤"
+    ];
+
+    function randomPhrase() {
+      return angryPhrases[Math.floor(Math.random() * angryPhrases.length)];
+    }
+
+    function showAngryText() {
+      angryText.style.animation = "none";
+      angryText.offsetHeight;
+      angryText.style.animation = "pop 0.2s ease";
+      angryText.textContent = randomPhrase();
+    }
+
+    function moveNoButton() {
+      const padding = 20;
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+
+      const maxX = window.innerWidth - btnWidth - padding;
+      const maxY = window.innerHeight - btnHeight - padding;
+
+      const x = Math.floor(Math.random() * (maxX - padding + 1)) + padding;
+      const y = Math.floor(Math.random() * (maxY - padding + 1)) + padding;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    // Movimento costante
+    let speed = 450; // più basso = più veloce
+    setInterval(() => {
+      moveNoButton();
+    }, speed);
+
+    // Se provi a cliccarlo o toccarlo
+    noBtn.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      moveNoButton();
+      showAngryText();
+    });
+
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
+      showAngryText();
+    });
+
+    // SÌ -> cuore gigante
+    yesBtn.addEventListener("click", () => {
+      main.style.display = "none";
+      noBtn.style.display = "none";
+      loveScreen.style.display = "flex";
+    });
+
+    // posizione iniziale
+    moveNoButton();
+  </script>
+</body>
+</html>
